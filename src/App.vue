@@ -49,6 +49,11 @@ function mostraSaldoFuturo() {
   const { saldo, transferindo } = estado;
   return saldo - transferindo;
 }
+
+function validaValorTransferencia() {
+  const { saldo, transferindo } = estado;
+  return saldo >= transferindo;
+}
 </script>
 
 <template>
@@ -87,11 +92,14 @@ function mostraSaldoFuturo() {
   Transferirindo: {{ estado.transferindo }} <br />
   Saldo depois da trasnferencias: {{ mostraSaldoFuturo() }} <br />
   <input
-    :class="{ invalido: estado.transferindo > estado.saldo }"
+    class="campo"
+    :class="{ invalido: !validaValorTransferencia() }"
     @keyup="(evento) => (estado.transferindo = evento.target.value)"
     type="number"
     placeholder="Quantia para transferir"
   />
+  <button v-if="validaValorTransferencia()">Transferir</button>
+  <span v-else>Valor maior que o saldo.</span>
 </template>
 
 <style scoped>
@@ -102,5 +110,9 @@ img {
 .invalido {
   outline: 2px solid tomato;
   /* border: 2px solid red; */
+}
+
+.campo {
+  border: 2px solid black;
 }
 </style>
