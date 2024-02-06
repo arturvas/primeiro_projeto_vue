@@ -28,6 +28,8 @@ const estaAutorizado = false;
 const estado = reactive({
   contador: 0,
   email: "",
+  saldo: 5000,
+  transferindo: 0,
 });
 
 function incrementar() {
@@ -40,6 +42,12 @@ function decrementar() {
 
 function alteraEmail(evento) {
   estado.email = evento.target.value;
+}
+
+function mostraSaldoFuturo() {
+  // os {} significa que vamos extrair as propriedades
+  const { saldo, transferindo } = estado;
+  return saldo - transferindo;
 }
 </script>
 
@@ -71,10 +79,28 @@ function alteraEmail(evento) {
     @keyup = insere o conteudo instantaneamente 
     @change = insere o conteudo somente apos sair do campo
   -->
+
+  <br />
+  <hr />
+
+  Saldo: {{ estado.saldo }} <br />
+  Transferirindo: {{ estado.transferindo }} <br />
+  Saldo depois da trasnferencias: {{ mostraSaldoFuturo() }} <br />
+  <input
+    :class="{ invalido: estado.transferindo > estado.saldo }"
+    @keyup="(evento) => (estado.transferindo = evento.target.value)"
+    type="number"
+    placeholder="Quantia para transferir"
+  />
 </template>
 
 <style scoped>
 img {
   max-width: 200px;
+}
+
+.invalido {
+  outline: 2px solid tomato;
+  /* border: 2px solid red; */
 }
 </style>
